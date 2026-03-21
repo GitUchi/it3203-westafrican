@@ -1,0 +1,458 @@
+/* ============================================================
+   West African Traditional Foods — IT 3203 Class Project
+   Author: [Your Name]
+   Style: Warm earthy tones — browns, oranges, creams
+   ============================================================ */
+
+/* ---------- CSS Custom Properties (Variables) ---------- */
+:root {
+  --brown-dark:   #3E1F00;
+  --brown-mid:    #6B3A1F;
+  --brown-light:  #A0522D;
+  --orange:       #C4622D;
+  --orange-light: #E8843A;
+  --cream:        #F5ECD7;
+  --cream-dark:   #EDD9B0;
+  --tan:          #D4B483;
+  --text-dark:    #2C1500;
+  --text-mid:     #5C3317;
+  --text-light:   #F5ECD7;
+  --white:        #FDFAF4;
+  --shadow:       rgba(62, 31, 0, 0.18);
+  --font-heading: 'Georgia', 'Times New Roman', serif;
+  --font-body:    'Palatino Linotype', 'Palatino', Georgia, serif;
+}
+
+/* ---------- Reset & Base ---------- */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: var(--font-body);
+  font-size: 1rem;
+  line-height: 1.75;
+  background-color: var(--cream);
+  color: var(--text-dark);
+}
+
+/* ---------- Typography ---------- */
+h1, h2, h3, h4 {
+  font-family: var(--font-heading);
+  color: var(--brown-dark);
+  line-height: 1.25;
+}
+
+h1 { font-size: 2.4rem; }
+h2 { font-size: 1.8rem; margin-bottom: 0.6rem; }
+h3 { font-size: 1.3rem; margin-bottom: 0.4rem; }
+h4 { font-size: 1.05rem; }
+
+p  { margin-bottom: 1rem; }
+
+/* ---------- Links ---------- */
+a {
+  color: var(--orange);
+  text-decoration: none;
+  transition: color 0.25s ease, border-bottom-color 0.25s ease;
+  border-bottom: 1px solid transparent;
+}
+
+/* Hover effect on links */
+a:hover {
+  color: var(--brown-dark);
+  border-bottom-color: var(--brown-dark);
+}
+
+/* ---------- LAYOUT — CSS Grid ---------- */
+.site-wrapper {
+  display: grid;
+  grid-template-rows: auto auto 1fr auto;
+  grid-template-areas:
+    "header"
+    "nav"
+    "main"
+    "footer";
+  min-height: 100vh;
+}
+
+/* ---------- Header ---------- */
+.site-header {
+  grid-area: header;
+  background-color: var(--brown-dark);
+  color: var(--text-light);
+  padding: 2rem 2.5rem 1.5rem;
+  border-bottom: 5px solid var(--orange);
+  /* decorative kente-inspired stripe */
+  background-image: repeating-linear-gradient(
+    90deg,
+    transparent,
+    transparent 60px,
+    rgba(196, 98, 45, 0.12) 60px,
+    rgba(196, 98, 45, 0.12) 62px
+  );
+}
+
+.site-header h1 {
+  color: var(--cream);
+  font-size: 2.6rem;
+  letter-spacing: 0.04em;
+}
+
+.site-header .tagline {
+  color: var(--tan);
+  font-style: italic;
+  font-size: 1.05rem;
+  margin-top: 0.3rem;
+}
+
+/* ---------- Navigation ---------- */
+.site-nav {
+  grid-area: nav;
+  background-color: var(--brown-mid);
+  border-bottom: 3px solid var(--orange-light);
+}
+
+.site-nav ul {
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0;
+  padding: 0 1.5rem;
+}
+
+.site-nav ul li a {
+  display: block;
+  padding: 0.85rem 1.2rem;
+  color: var(--cream);
+  font-family: var(--font-heading);
+  font-size: 0.95rem;
+  letter-spacing: 0.03em;
+  border-bottom: none;
+  border-top: 3px solid transparent;
+  transition: background-color 0.2s ease, border-top-color 0.2s ease, color 0.2s ease;
+}
+
+/* Hover effect on nav links */
+.site-nav ul li a:hover,
+.site-nav ul li a.active {
+  background-color: var(--brown-dark);
+  color: var(--orange-light);
+  border-top-color: var(--orange-light);
+  border-bottom: none;
+}
+
+/* ---------- Main Content ---------- */
+main {
+  grid-area: main;
+  max-width: 960px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 2.5rem 2rem;
+}
+
+/* ---------- Page Hero Banner ---------- */
+.page-hero {
+  background-color: var(--brown-light);
+  color: var(--cream);
+  padding: 2rem 2.5rem;
+  margin-bottom: 2.5rem;
+  border-left: 6px solid var(--orange);
+  border-radius: 2px;
+}
+
+.page-hero h2 {
+  color: var(--cream);
+  font-size: 2rem;
+}
+
+.page-hero p {
+  color: var(--cream-dark);
+  margin-bottom: 0;
+}
+
+/* ---------- Cards Grid (homepage TOC) ---------- */
+.cards-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1.4rem;
+  margin: 2rem 0;
+}
+
+.card {
+  background-color: var(--white);
+  border: 1px solid var(--cream-dark);
+  border-top: 4px solid var(--orange);
+  padding: 1.4rem 1.5rem;
+  border-radius: 3px;
+  box-shadow: 0 2px 8px var(--shadow);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 18px var(--shadow);
+}
+
+.card h3 {
+  color: var(--brown-mid);
+  margin-bottom: 0.5rem;
+}
+
+.card p {
+  font-size: 0.92rem;
+  color: var(--text-mid);
+  margin-bottom: 0.8rem;
+}
+
+.card a.card-link {
+  display: inline-block;
+  background-color: var(--orange);
+  color: var(--white);
+  padding: 0.4rem 1rem;
+  font-size: 0.88rem;
+  border-radius: 2px;
+  border-bottom: none;
+  transition: background-color 0.2s ease;
+}
+
+.card a.card-link:hover {
+  background-color: var(--brown-dark);
+  border-bottom: none;
+  color: var(--cream);
+}
+
+/* ---------- Key Terms Box (homepage) ---------- */
+.key-terms {
+  background-color: var(--cream-dark);
+  border: 1px solid var(--tan);
+  border-left: 5px solid var(--brown-mid);
+  padding: 1.4rem 1.8rem;
+  margin: 2rem 0;
+  border-radius: 2px;
+}
+
+.key-terms h3 {
+  margin-bottom: 0.8rem;
+  color: var(--brown-dark);
+}
+
+.key-terms ul {
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+}
+
+.key-terms ul li {
+  background-color: var(--orange);
+  color: var(--white);
+  padding: 0.3rem 0.85rem;
+  border-radius: 20px;
+  font-size: 0.9rem;
+  font-family: var(--font-heading);
+}
+
+/* ---------- Section Divider ---------- */
+.section-divider {
+  border: none;
+  border-top: 2px solid var(--cream-dark);
+  margin: 2.5rem 0;
+}
+
+/* ---------- Content Sections ---------- */
+.content-section {
+  margin-bottom: 2.5rem;
+}
+
+.content-section h2 {
+  border-bottom: 2px solid var(--orange-light);
+  padding-bottom: 0.4rem;
+  margin-bottom: 1rem;
+}
+
+/* ---------- Images ---------- */
+.food-image {
+  width: 100%;
+  max-width: 480px;
+  height: auto;
+  border: 3px solid var(--tan);
+  border-radius: 3px;
+  box-shadow: 0 4px 14px var(--shadow);
+  display: block;
+  margin: 1.2rem auto;
+}
+
+.image-caption {
+  text-align: center;
+  font-size: 0.85rem;
+  color: var(--text-mid);
+  font-style: italic;
+  margin-top: -0.6rem;
+  margin-bottom: 1.2rem;
+}
+
+/* ---------- Tables ---------- */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1.5rem 0;
+  font-size: 0.95rem;
+  box-shadow: 0 2px 8px var(--shadow);
+}
+
+thead {
+  background-color: var(--brown-dark);
+  color: var(--cream);
+}
+
+thead th {
+  padding: 0.75rem 1rem;
+  text-align: left;
+  font-family: var(--font-heading);
+  letter-spacing: 0.03em;
+}
+
+tbody tr {
+  border-bottom: 1px solid var(--cream-dark);
+  transition: background-color 0.15s ease;
+}
+
+/* Hover effect on table rows */
+tbody tr:hover {
+  background-color: var(--cream-dark);
+}
+
+tbody td {
+  padding: 0.65rem 1rem;
+  color: var(--text-dark);
+}
+
+tbody tr:nth-child(even) {
+  background-color: var(--white);
+}
+
+/* ---------- Lists ---------- */
+ul.content-list, ol.content-list {
+  padding-left: 1.6rem;
+  margin-bottom: 1rem;
+}
+
+ul.content-list li, ol.content-list li {
+  margin-bottom: 0.5rem;
+}
+
+/* ---------- Definition / Concept Cards ---------- */
+.concept-card {
+  background-color: var(--white);
+  border-left: 5px solid var(--orange);
+  padding: 1.2rem 1.5rem;
+  margin-bottom: 1.4rem;
+  box-shadow: 0 2px 6px var(--shadow);
+  border-radius: 0 3px 3px 0;
+}
+
+.concept-card h3 {
+  color: var(--orange);
+  margin-bottom: 0.4rem;
+}
+
+.concept-card p {
+  margin-bottom: 0;
+  font-size: 0.97rem;
+}
+
+/* ---------- References Page ---------- */
+.reference-item {
+  padding: 0.9rem 0;
+  border-bottom: 1px solid var(--cream-dark);
+}
+
+.reference-item:last-child {
+  border-bottom: none;
+}
+
+.reference-item p {
+  margin-bottom: 0.2rem;
+  font-size: 0.95rem;
+}
+
+/* ---------- About Page ---------- */
+.about-profile {
+  display: grid;
+  grid-template-columns: 200px 1fr;
+  gap: 2rem;
+  align-items: start;
+  margin-bottom: 2rem;
+}
+
+.about-profile img {
+  width: 100%;
+  border: 3px solid var(--tan);
+  border-radius: 3px;
+}
+
+.about-placeholder-img {
+  width: 100%;
+  aspect-ratio: 1;
+  background-color: var(--tan);
+  border: 3px solid var(--brown-mid);
+  border-radius: 3px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--brown-dark);
+  font-size: 3rem;
+}
+
+.skills-table th {
+  background-color: var(--brown-mid);
+}
+
+/* ---------- Footer ---------- */
+.site-footer {
+  grid-area: footer;
+  background-color: var(--brown-dark);
+  color: var(--tan);
+  text-align: center;
+  padding: 1.2rem 2rem;
+  font-size: 0.88rem;
+  border-top: 4px solid var(--orange);
+}
+
+.site-footer a {
+  color: var(--orange-light);
+  border-bottom: none;
+}
+
+.site-footer a:hover {
+  color: var(--cream);
+  border-bottom: none;
+}
+
+/* ---------- Utility ---------- */
+.highlight {
+  background-color: var(--cream-dark);
+  border-left: 4px solid var(--orange-light);
+  padding: 1rem 1.4rem;
+  margin: 1.2rem 0;
+  border-radius: 0 2px 2px 0;
+  font-style: italic;
+}
+
+.tag {
+  display: inline-block;
+  background-color: var(--brown-light);
+  color: var(--cream);
+  padding: 0.2rem 0.7rem;
+  border-radius: 20px;
+  font-size: 0.82rem;
+  margin-right: 0.4rem;
+  margin-bottom: 0.4rem;
+}
