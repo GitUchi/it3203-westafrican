@@ -1,0 +1,756 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- Meta and title -->
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Quiz — West African Traditional Foods</title>
+  <!-- Single external stylesheet -->
+  <link rel="stylesheet" href="css/style.css" />
+  <!-- Quiz-specific styles -->
+  <style>
+    /* ===== Quiz Form Styles ===== */
+    .quiz-form {
+      background-color: var(--white);
+      border: 1px solid var(--cream-dark);
+      border-radius: 4px;
+      box-shadow: 0 2px 10px var(--shadow);
+      padding: 2rem 2.5rem;
+      margin-top: 1.5rem;
+    }
+
+    /* Individual question block */
+    .question-block {
+      margin-bottom: 2rem;
+      padding-bottom: 1.8rem;
+      border-bottom: 1px solid var(--cream-dark);
+    }
+
+    .question-block:last-of-type {
+      border-bottom: none;
+    }
+
+    /* Question number badge + text */
+    .question-label {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.9rem;
+      margin-bottom: 1rem;
+    }
+
+    .question-number {
+      background-color: var(--orange);
+      color: var(--white);
+      font-family: var(--font-heading);
+      font-size: 0.88rem;
+      font-weight: bold;
+      min-width: 2rem;
+      height: 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      flex-shrink: 0;
+      margin-top: 0.1rem;
+    }
+
+    .question-text {
+      font-family: var(--font-heading);
+      font-size: 1.05rem;
+      color: var(--brown-dark);
+      line-height: 1.4;
+    }
+
+    /* Fill-in-the-blank input */
+    .fill-blank-input {
+      width: 100%;
+      max-width: 420px;
+      padding: 0.55rem 0.85rem;
+      font-family: var(--font-body);
+      font-size: 0.97rem;
+      border: 2px solid var(--tan);
+      border-radius: 3px;
+      background-color: var(--cream);
+      color: var(--text-dark);
+      transition: border-color 0.2s ease, box-shadow 0.2s ease;
+      display: block;
+      margin-top: 0.5rem;
+    }
+
+    .fill-blank-input:focus {
+      outline: none;
+      border-color: var(--orange);
+      box-shadow: 0 0 0 3px rgba(196, 98, 45, 0.15);
+    }
+
+    /* Radio / Checkbox options */
+    .options-list {
+      list-style: none;
+      padding: 0;
+      margin-top: 0.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.55rem;
+    }
+
+    .option-item {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 0.55rem 0.9rem;
+      background-color: var(--cream);
+      border: 1px solid var(--cream-dark);
+      border-radius: 3px;
+      cursor: pointer;
+      transition: background-color 0.15s ease, border-color 0.15s ease;
+      max-width: 560px;
+    }
+
+    .option-item:hover {
+      background-color: var(--cream-dark);
+      border-color: var(--tan);
+    }
+
+    .option-item input[type="radio"],
+    .option-item input[type="checkbox"] {
+      accent-color: var(--orange);
+      width: 1.1rem;
+      height: 1.1rem;
+      flex-shrink: 0;
+      cursor: pointer;
+    }
+
+    .option-item label {
+      font-size: 0.97rem;
+      color: var(--text-dark);
+      cursor: pointer;
+      line-height: 1.4;
+    }
+
+    /* Hint text under multi-select question */
+    .hint-text {
+      font-size: 0.85rem;
+      color: var(--text-mid);
+      font-style: italic;
+      margin-top: 0.3rem;
+      margin-bottom: 0.6rem;
+    }
+
+    /* Submit / Reset buttons */
+    .quiz-buttons {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+      margin-top: 2rem;
+    }
+
+    .btn-submit {
+      background-color: var(--orange);
+      color: var(--white);
+      font-family: var(--font-heading);
+      font-size: 1rem;
+      letter-spacing: 0.03em;
+      padding: 0.7rem 2rem;
+      border: none;
+      border-radius: 3px;
+      cursor: pointer;
+      transition: background-color 0.2s ease, transform 0.1s ease;
+    }
+
+    .btn-submit:hover {
+      background-color: var(--brown-mid);
+    }
+
+    .btn-submit:active {
+      transform: scale(0.98);
+    }
+
+    .btn-reset {
+      background-color: transparent;
+      color: var(--brown-mid);
+      font-family: var(--font-heading);
+      font-size: 1rem;
+      padding: 0.7rem 2rem;
+      border: 2px solid var(--brown-mid);
+      border-radius: 3px;
+      cursor: pointer;
+      transition: background-color 0.2s ease, color 0.2s ease;
+    }
+
+    .btn-reset:hover {
+      background-color: var(--brown-mid);
+      color: var(--cream);
+    }
+
+    /* ===== Results Panel ===== */
+    #results-panel {
+      display: none; /* hidden until submitted */
+      margin-top: 2.5rem;
+      animation: fadeIn 0.4s ease;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Score banner */
+    .score-banner {
+      padding: 1.8rem 2rem;
+      border-radius: 4px;
+      margin-bottom: 2rem;
+      text-align: center;
+      box-shadow: 0 3px 12px var(--shadow);
+    }
+
+    .score-banner.pass {
+      background-color: #2d6a2d;
+      color: #e8f5e8;
+      border: 3px solid #4caf50;
+    }
+
+    .score-banner.fail {
+      background-color: #6a2d2d;
+      color: #f5e8e8;
+      border: 3px solid #e57373;
+    }
+
+    .score-banner .result-verdict {
+      font-family: var(--font-heading);
+      font-size: 1.8rem;
+      font-weight: bold;
+      margin-bottom: 0.4rem;
+    }
+
+    .score-banner .result-score {
+      font-size: 1.15rem;
+    }
+
+    /* Per-question result cards */
+    .result-card {
+      background-color: var(--white);
+      border: 1px solid var(--cream-dark);
+      border-radius: 4px;
+      padding: 1.2rem 1.5rem;
+      margin-bottom: 1rem;
+      box-shadow: 0 1px 5px var(--shadow);
+    }
+
+    .result-card .result-question-head {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      margin-bottom: 0.6rem;
+    }
+
+    .badge-correct {
+      background-color: #388e3c;
+      color: #fff;
+      font-size: 0.78rem;
+      font-family: var(--font-heading);
+      padding: 0.2rem 0.65rem;
+      border-radius: 20px;
+      white-space: nowrap;
+    }
+
+    .badge-incorrect {
+      background-color: #c62828;
+      color: #fff;
+      font-size: 0.78rem;
+      font-family: var(--font-heading);
+      padding: 0.2rem 0.65rem;
+      border-radius: 20px;
+      white-space: nowrap;
+    }
+
+    .result-card .rq-text {
+      font-family: var(--font-heading);
+      font-size: 0.98rem;
+      color: var(--brown-dark);
+    }
+
+    .result-detail {
+      font-size: 0.92rem;
+      margin: 0.25rem 0;
+      color: var(--text-mid);
+    }
+
+    .result-detail strong {
+      color: var(--text-dark);
+    }
+
+    .answer-correct-text { color: #2e7d32; font-weight: bold; }
+    .answer-incorrect-text { color: #c62828; font-weight: bold; }
+  </style>
+</head>
+<body>
+
+  <!-- Site wrapper uses CSS Grid for full layout -->
+  <div class="site-wrapper">
+
+    <!-- ===== HEADER ===== -->
+    <header class="site-header">
+      <h1>West African Traditional Foods</h1>
+      <p class="tagline">Exploring the rich culinary heritage of West Africa — from Jollof to Fufu</p>
+    </header>
+
+    <!-- ===== NAVIGATION ===== -->
+    <nav class="site-nav" aria-label="Main Navigation">
+      <ul>
+        <li><a href="index.html">Home</a></li>
+        <li><a href="staple-foods.html">Staple Foods</a></li>
+        <li><a href="soups-stews.html">Soups &amp; Stews</a></li>
+        <li><a href="key-concepts.html">Key Concepts</a></li>
+        <li><a href="references.html">References</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="quiz.html" class="active">Quiz</a></li>
+      </ul>
+    </nav>
+
+    <!-- ===== MAIN CONTENT ===== -->
+    <main>
+
+      <!-- Page hero banner -->
+      <div class="page-hero">
+        <h2>Self-Assessment Quiz</h2>
+        <p>
+          Test your understanding of West African traditional foods. Answer all five
+          questions below, then submit to see your score and results.
+        </p>
+      </div>
+
+      <!-- ===== QUIZ FORM ===== -->
+      <section class="content-section" aria-labelledby="quiz-heading">
+        <h2 id="quiz-heading">West African Foods Quiz</h2>
+
+        <!-- Quiz form — no action/method; handled entirely by JavaScript -->
+        <div class="quiz-form" id="quiz-form">
+
+          <!-- ── Q1: Fill in the Blank ── -->
+          <div class="question-block" id="q1-block">
+            <div class="question-label">
+              <span class="question-number">1</span>
+              <span class="question-text">
+                Fill in the blank: __________ is the red oil pressed from the
+                fruit of the oil palm tree and is used across nearly all West
+                African cuisines as a primary cooking fat.
+              </span>
+            </div>
+            <!-- Text input for fill-in-the-blank -->
+            <input
+              type="text"
+              id="q1-input"
+              class="fill-blank-input"
+              placeholder="Type your answer here…"
+              aria-label="Fill in the blank answer for question 1"
+            />
+          </div>
+
+          <!-- ── Q2: Multiple Choice (single correct) ── -->
+          <div class="question-block" id="q2-block">
+            <div class="question-label">
+              <span class="question-number">2</span>
+              <span class="question-text">
+                Which West African country claims the most internationally
+                recognized version of Jollof Rice?
+              </span>
+            </div>
+            <ul class="options-list">
+              <li class="option-item">
+                <input type="radio" name="q2" id="q2a" value="A" />
+                <label for="q2a">Senegal — also known as Thiéboudienne</label>
+              </li>
+              <li class="option-item">
+                <input type="radio" name="q2" id="q2b" value="B" />
+                <label for="q2b">Nigeria — often called Nigerian Jollof</label>
+              </li>
+              <li class="option-item">
+                <input type="radio" name="q2" id="q2c" value="C" />
+                <label for="q2c">Mali — the original grain origin country</label>
+              </li>
+              <li class="option-item">
+                <input type="radio" name="q2" id="q2d" value="D" />
+                <label for="q2d">Côte d'Ivoire — due to its French culinary influence</label>
+              </li>
+            </ul>
+          </div>
+
+          <!-- ── Q3: Multiple Choice (single correct) ── -->
+          <div class="question-block" id="q3-block">
+            <div class="question-label">
+              <span class="question-number">3</span>
+              <span class="question-text">
+                What is Fufu primarily made from in West Africa?
+              </span>
+            </div>
+            <ul class="options-list">
+              <li class="option-item">
+                <input type="radio" name="q3" id="q3a" value="A" />
+                <label for="q3a">Ground maize and water</label>
+              </li>
+              <li class="option-item">
+                <input type="radio" name="q3" id="q3b" value="B" />
+                <label for="q3b">Mashed sweet potatoes</label>
+              </li>
+              <li class="option-item">
+                <input type="radio" name="q3" id="q3c" value="C" />
+                <label for="q3c">Pounded yam or cassava (or a blend of both)</label>
+              </li>
+              <li class="option-item">
+                <input type="radio" name="q3" id="q3d" value="D" />
+                <label for="q3d">Boiled plantain and cocoyam</label>
+              </li>
+            </ul>
+          </div>
+
+          <!-- ── Q4: Multiple Choice (single correct) ── -->
+          <div class="question-block" id="q4-block">
+            <div class="question-label">
+              <span class="question-number">4</span>
+              <span class="question-text">
+                Egusi soup is named after its key ingredient. What is Egusi?
+              </span>
+            </div>
+            <ul class="options-list">
+              <li class="option-item">
+                <input type="radio" name="q4" id="q4a" value="A" />
+                <label for="q4a">Dried and ground crayfish</label>
+              </li>
+              <li class="option-item">
+                <input type="radio" name="q4" id="q4b" value="B" />
+                <label for="q4b">Ground melon seeds</label>
+              </li>
+              <li class="option-item">
+                <input type="radio" name="q4" id="q4c" value="C" />
+                <label for="q4c">Fermented locust beans</label>
+              </li>
+              <li class="option-item">
+                <input type="radio" name="q4" id="q4d" value="D" />
+                <label for="q4d">Powdered dried okra</label>
+              </li>
+            </ul>
+          </div>
+
+          <!-- ── Q5: Multi-Selection (more than one correct) ── -->
+          <div class="question-block" id="q5-block">
+            <div class="question-label">
+              <span class="question-number">5</span>
+              <span class="question-text">
+                Which of the following are staple foods commonly eaten across
+                West Africa? <em>(Select all that apply — multiple answers are correct.)</em>
+              </span>
+            </div>
+            <p class="hint-text">Hint: More than one answer is correct.</p>
+            <ul class="options-list">
+              <li class="option-item">
+                <input type="checkbox" name="q5" id="q5a" value="A" />
+                <label for="q5a">Cassava</label>
+              </li>
+              <li class="option-item">
+                <input type="checkbox" name="q5" id="q5b" value="B" />
+                <label for="q5b">Plantain</label>
+              </li>
+              <li class="option-item">
+                <input type="checkbox" name="q5" id="q5c" value="C" />
+                <label for="q5c">Sushi rice</label>
+              </li>
+              <li class="option-item">
+                <input type="checkbox" name="q5" id="q5d" value="D" />
+                <label for="q5d">Yam</label>
+              </li>
+              <li class="option-item">
+                <input type="checkbox" name="q5" id="q5e" value="E" />
+                <label for="q5e">Millet</label>
+              </li>
+            </ul>
+          </div>
+
+          <!-- Submit and Reset buttons -->
+          <div class="quiz-buttons">
+            <button type="button" class="btn-submit" id="btn-submit" onclick="submitQuiz()">
+              Submit Quiz
+            </button>
+            <button type="button" class="btn-reset" id="btn-reset" onclick="resetQuiz()">
+              Retake / Reset
+            </button>
+          </div>
+        </div><!-- end .quiz-form -->
+
+        <!-- ===== RESULTS PANEL (hidden until submission) ===== -->
+        <div id="results-panel" aria-live="polite">
+          <!-- Score banner is injected here by JavaScript -->
+          <div id="score-banner-container"></div>
+
+          <h3 style="font-family: var(--font-heading); color: var(--brown-dark); margin-bottom: 1rem;">
+            Question-by-Question Breakdown
+          </h3>
+
+          <!-- Individual result cards injected here by JavaScript -->
+          <div id="result-cards-container"></div>
+        </div>
+
+      </section>
+
+    </main>
+
+    <!-- ===== FOOTER ===== -->
+    <footer class="site-footer">
+      <p>
+        West African Traditional Foods &mdash; IT 3203 Class Project &nbsp;|&nbsp;
+        <a href="https://ksuweb.github.io/IT3203/" target="_blank" rel="noopener">
+          KSU IT 3203 Web Development
+        </a>
+      </p>
+    </footer>
+
+  </div><!-- end site-wrapper -->
+
+  <!-- ===== QUIZ JAVASCRIPT ===== -->
+  <script>
+    /*
+     * Quiz logic for West African Traditional Foods
+     * Handles: submission, scoring, result display, and reset.
+     *
+     * Answer key:
+     *   Q1 (fill-blank)   : "palm oil"  (case-insensitive)
+     *   Q2 (radio)        : "B" — Nigeria (the well-known "Jollof Wars" debate)
+     *   Q3 (radio)        : "C" — Pounded yam or cassava
+     *   Q4 (radio)        : "B" — Ground melon seeds
+     *   Q5 (checkbox)     : A, B, D, E — Cassava, Plantain, Yam, Millet
+     */
+
+    // ── Answer Key ──────────────────────────────────────────────────────────
+    const ANSWERS = {
+      q1: "palm oil",               // normalized to lowercase for comparison
+      q2: "B",
+      q3: "C",
+      q4: "B",
+      q5: ["A", "B", "D", "E"]     // all correct checkboxes
+    };
+
+    // ── Friendly question text for results display ───────────────────────────
+    const QUESTION_TEXTS = {
+      q1: "Fill in the blank: the red oil pressed from the oil palm fruit used across West African cuisines.",
+      q2: "Which country claims the most internationally recognized version of Jollof Rice?",
+      q3: "What is Fufu primarily made from?",
+      q4: "Egusi soup is named after its key ingredient. What is Egusi?",
+      q5: "Which of the following are staple foods commonly eaten across West Africa? (Select all that apply)"
+    };
+
+    // ── Correct answer descriptions for result explanations ─────────────────
+    const CORRECT_DESCRIPTIONS = {
+      q1: "Palm Oil",
+      q2: "Nigeria (Nigerian Jollof)",
+      q3: "Pounded yam or cassava (or a blend of both)",
+      q4: "Ground melon seeds",
+      q5: "Cassava, Plantain, Yam, and Millet"
+    };
+
+    // ── submitQuiz() ─────────────────────────────────────────────────────────
+    // Reads all form values, checks against answer key, calculates score,
+    // and renders the results panel.
+    function submitQuiz() {
+      // Collect user answers
+      const userAnswers = getUserAnswers();
+
+      // Grade each question
+      const results = gradeQuiz(userAnswers);
+
+      // Calculate total score
+      const totalCorrect = results.filter(r => r.correct).length;
+      const totalQuestions = results.length;
+      const percentage = Math.round((totalCorrect / totalQuestions) * 100);
+      const passed = percentage >= 60;   // passing threshold: 60%
+
+      // Render score banner
+      renderScoreBanner(totalCorrect, totalQuestions, percentage, passed);
+
+      // Render per-question result cards
+      renderResultCards(results, userAnswers);
+
+      // Show the results panel and scroll to it
+      const panel = document.getElementById("results-panel");
+      panel.style.display = "block";
+      panel.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+
+    // ── getUserAnswers() ─────────────────────────────────────────────────────
+    // Returns an object with user's input for each question.
+    function getUserAnswers() {
+      // Q1: fill-in-the-blank text input
+      const q1Val = document.getElementById("q1-input").value.trim().toLowerCase();
+
+      // Q2–Q4: radio buttons
+      const q2Selected = document.querySelector('input[name="q2"]:checked');
+      const q3Selected = document.querySelector('input[name="q3"]:checked');
+      const q4Selected = document.querySelector('input[name="q4"]:checked');
+
+      // Q5: checkboxes — collect all checked values into an array
+      const q5Checked = Array.from(
+        document.querySelectorAll('input[name="q5"]:checked')
+      ).map(cb => cb.value);
+
+      return {
+        q1: q1Val,
+        q2: q2Selected ? q2Selected.value : null,
+        q3: q3Selected ? q3Selected.value : null,
+        q4: q4Selected ? q4Selected.value : null,
+        q5: q5Checked
+      };
+    }
+
+    // ── gradeQuiz() ──────────────────────────────────────────────────────────
+    // Compares userAnswers against ANSWERS key.
+    // Returns array of { qKey, correct } objects.
+    function gradeQuiz(userAnswers) {
+      const results = [];
+
+      // Q1: case-insensitive string match
+      results.push({
+        qKey: "q1",
+        correct: userAnswers.q1 === ANSWERS.q1
+      });
+
+      // Q2–Q4: exact string match
+      ["q2", "q3", "q4"].forEach(qKey => {
+        results.push({
+          qKey: qKey,
+          correct: userAnswers[qKey] === ANSWERS[qKey]
+        });
+      });
+
+      // Q5: multi-select — user must select exactly the correct set
+      // Sort both arrays and compare as JSON strings
+      const userQ5Sorted = [...userAnswers.q5].sort().join(",");
+      const correctQ5Sorted = [...ANSWERS.q5].sort().join(",");
+      results.push({
+        qKey: "q5",
+        correct: userQ5Sorted === correctQ5Sorted
+      });
+
+      return results;
+    }
+
+    // ── renderScoreBanner() ──────────────────────────────────────────────────
+    // Injects the overall pass/fail banner into the results panel.
+    function renderScoreBanner(totalCorrect, totalQuestions, percentage, passed) {
+      const container = document.getElementById("score-banner-container");
+      const verdict = passed ? "✓ PASSED" : "✗ FAILED";
+      const cssClass = passed ? "pass" : "fail";
+
+      container.innerHTML = `
+        <div class="score-banner ${cssClass}" role="status" aria-label="Quiz result: ${verdict}">
+          <div class="result-verdict">${verdict}</div>
+          <div class="result-score">
+            You answered <strong>${totalCorrect}</strong> out of
+            <strong>${totalQuestions}</strong> questions correctly —
+            <strong>${percentage}%</strong>
+          </div>
+        </div>
+      `;
+    }
+
+    // ── renderResultCards() ──────────────────────────────────────────────────
+    // Injects one result card per question into the results panel.
+    function renderResultCards(results, userAnswers) {
+      const container = document.getElementById("result-cards-container");
+      container.innerHTML = "";   // clear any previous results
+
+      results.forEach((result, index) => {
+        const qNum = index + 1;
+        const badgeHtml = result.correct
+          ? '<span class="badge-correct">✓ Correct</span>'
+          : '<span class="badge-incorrect">✗ Incorrect</span>';
+
+        // Format the user's answer for display
+        let userAnswerDisplay = "";
+        if (result.qKey === "q5") {
+          // Multi-select: show selected labels or "(none selected)"
+          userAnswerDisplay = userAnswers.q5.length > 0
+            ? getCheckboxLabels(userAnswers.q5)
+            : "(none selected)";
+        } else if (result.qKey === "q1") {
+          userAnswerDisplay = userAnswers.q1 !== "" ? userAnswers.q1 : "(blank)";
+        } else {
+          userAnswerDisplay = userAnswers[result.qKey]
+            ? getRadioLabel(result.qKey, userAnswers[result.qKey])
+            : "(not answered)";
+        }
+
+        // Build the correct-answer row (shown on incorrect, or for reinforcement)
+        const answerRowHtml = result.correct
+          ? `<p class="result-detail"><strong>Answer:</strong> <span class="answer-correct-text">${CORRECT_DESCRIPTIONS[result.qKey]}</span></p>`
+          : `<p class="result-detail"><strong>Your answer:</strong> <span class="answer-incorrect-text">${escapeHtml(userAnswerDisplay)}</span></p>
+             <p class="result-detail"><strong>Correct answer:</strong> <span class="answer-correct-text">${CORRECT_DESCRIPTIONS[result.qKey]}</span></p>`;
+
+        const card = document.createElement("div");
+        card.className = "result-card";
+        card.innerHTML = `
+          <div class="result-question-head">
+            <span style="font-family:var(--font-heading); color:var(--text-mid); font-size:0.88rem;">Q${qNum}</span>
+            ${badgeHtml}
+            <span class="rq-text">${QUESTION_TEXTS[result.qKey]}</span>
+          </div>
+          ${answerRowHtml}
+        `;
+        container.appendChild(card);
+      });
+    }
+
+    // ── getRadioLabel() ──────────────────────────────────────────────────────
+    // Returns the visible label text for a selected radio option.
+    function getRadioLabel(qName, value) {
+      const input = document.querySelector(`input[name="${qName}"][value="${value}"]`);
+      if (!input) return value;
+      const label = document.querySelector(`label[for="${input.id}"]`);
+      return label ? label.textContent.trim() : value;
+    }
+
+    // ── getCheckboxLabels() ──────────────────────────────────────────────────
+    // Returns a comma-joined string of label texts for checked checkboxes.
+    function getCheckboxLabels(values) {
+      return values.map(val => {
+        const input = document.querySelector(`input[name="q5"][value="${val}"]`);
+        if (!input) return val;
+        const label = document.querySelector(`label[for="${input.id}"]`);
+        return label ? label.textContent.trim() : val;
+      }).join(", ");
+    }
+
+    // ── escapeHtml() ─────────────────────────────────────────────────────────
+    // Prevents XSS when inserting user-typed text into innerHTML.
+    function escapeHtml(str) {
+      const div = document.createElement("div");
+      div.appendChild(document.createTextNode(str));
+      return div.innerHTML;
+    }
+
+    // ── resetQuiz() ──────────────────────────────────────────────────────────
+    // Clears all inputs and hides the results panel so the user can retake.
+    function resetQuiz() {
+      // Clear fill-in-the-blank
+      document.getElementById("q1-input").value = "";
+
+      // Uncheck all radio buttons
+      document.querySelectorAll('input[type="radio"]').forEach(r => {
+        r.checked = false;
+      });
+
+      // Uncheck all checkboxes
+      document.querySelectorAll('input[type="checkbox"]').forEach(cb => {
+        cb.checked = false;
+      });
+
+      // Hide results panel and clear its content
+      const panel = document.getElementById("results-panel");
+      panel.style.display = "none";
+      document.getElementById("score-banner-container").innerHTML = "";
+      document.getElementById("result-cards-container").innerHTML = "";
+
+      // Scroll back to top of quiz form
+      document.getElementById("quiz-form").scrollIntoView({ behavior: "smooth" });
+    }
+  </script>
+
+</body>
+</html>
