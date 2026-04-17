@@ -21,6 +21,13 @@
 
     <!-- ===== NAVIGATION ===== -->
     <nav class="site-nav" aria-label="Main Navigation">
+      <!-- Hamburger toggle button — visible on mobile only, hidden on tablet+ via CSS -->
+      <button class="nav-toggle" aria-label="Toggle navigation menu" aria-expanded="false">
+        <span class="nav-toggle-label">Menu</span>
+        <span class="hamburger" aria-hidden="true">
+          <span></span><span></span><span></span>
+        </span>
+      </button>
       <ul>
         <li><a href="index.html" class="active">Home</a></li>
         <li><a href="staple-foods.html">Staple Foods</a></li>
@@ -150,6 +157,7 @@
       <!-- Quick Facts Table -->
       <section class="content-section" aria-labelledby="facts-heading">
         <h2 id="facts-heading">Quick Facts: West African Food Culture</h2>
+        <div class="table-responsive">
         <table>
           <thead>
             <tr>
@@ -184,6 +192,7 @@
             </tr>
           </tbody>
         </table>
+        </div><!-- end table-responsive -->
       </section>
 
     </main>
@@ -199,6 +208,9 @@
     </footer>
 
   </div><!-- end site-wrapper -->
+
+  <!-- External JavaScript: handles nav toggle, table wrappers, quiz logic -->
+  <script src="js/main.js"></script>
 
 </body>
 </html>

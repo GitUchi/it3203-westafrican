@@ -16,6 +16,13 @@
     </header>
 
     <nav class="site-nav" aria-label="Main Navigation">
+      <!-- Hamburger toggle button — visible on mobile only, hidden on tablet+ via CSS -->
+      <button class="nav-toggle" aria-label="Toggle navigation menu" aria-expanded="false">
+        <span class="nav-toggle-label">Menu</span>
+        <span class="hamburger" aria-hidden="true">
+          <span></span><span></span><span></span>
+        </span>
+      </button>
       <ul>
         <li><a href="index.html">Home</a></li>
         <li><a href="staple-foods.html">Staple Foods</a></li>
@@ -74,6 +81,7 @@
         <p>The dish traveled across the Atlantic with enslaved West Africans and became the ancestor of peanut-based stews found throughout the American South and the Caribbean.</p>
 
         <h3>Groundnut Soup vs. Region</h3>
+        <div class="table-responsive">
         <table>
           <thead>
             <tr>
@@ -89,6 +97,7 @@
             <tr><td>Sierra Leone / Guinea</td><td>Groundnut Stew</td><td>Lighter consistency, served over rice</td></tr>
           </tbody>
         </table>
+        </div><!-- end table-responsive -->
       </section>
 
       <hr class="section-divider" />
@@ -131,6 +140,9 @@
     </footer>
 
   </div>
+
+  <!-- External JavaScript: handles nav toggle, table wrappers, quiz logic -->
+  <script src="js/main.js"></script>
 
 </body>
 </html>
